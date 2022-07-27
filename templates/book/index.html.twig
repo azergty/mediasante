@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% set page_title = 'Nos livres' %}
+
+{% block body %}
+
+
+    <div class="container text-center bg-">
+        <div class="col-md-12 ">
+            <h1>Retrouver tout nos livres </h1>
+        </div>
+
+    </div>
+    <div class="container-fluid bg-light pb-2 pt-2">
+        {{ form_start(book_form,{'attr':{'class':'container my-form book-form '}}) }}
+
+            <div class="container-row-checkbox">
+                <label>Categories : </label>
+                <ul>
+                    {% for category in book_form.categories %}
+                        <li>
+                           {{ form_row(category,{'attr':{'class':'checkbox-row'}}) }} <br>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        {{ form_end(book_form) }}
+
+    </div>
+
+<div class="container">
+
+    <div class="col-md-12">
+        <h1>Les livres</h1>
+        {% for resp in app.session.flashBag.get('RENT_BOOK_SUCCESS') %}
+            <div class="alert {% if resp.success == false %}alert-danger{% else %} alert-success {% endif %}" role="alert">
+                {{ resp.message }}
+            </div>
+        {% endfor %}
+
+        <div class="navigation">
+            {{ knp_pagination_render(books) }}
+        </div>
+        <table  class="table table-striped" style="width:100%">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Reference</th>
+                <th>Auteur</th>
+                <th>Catégories</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {%  for book in books %}
+
+                <tr>
+                    <td>{{ book.id }}</td>
+                    <td>{{ book.reference }}</td>
+                    <td>{{ book.author.lastname }} {{ book.author.firstname }}</td>
+                    <td>{% for category in book.category %} {{ category.label }} {% endfor %}</td>
+                    <td class="text-center">
+                        <a title="ajouter à mon panier" href="{{ path('app_rent_book',{'book_id' : book.id}) }}" ><i class="bi bi-cart"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>Id</th>
+                <th>Reference</th>
+                <th>Auteur</th>
+                <th>Catégories</th>
+                <th>Action</th>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div class="navigation">
+            {{ knp_pagination_render(books) }}
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

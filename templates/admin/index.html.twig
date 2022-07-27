@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% set page_title = 'Administration' %}
+
+{% block body %}
+    <style>
+        .dataTables_info{
+            display:none;
+        }
+    </style>
+
+    <div class="container">
+        <div class="col-md-12">
+            <h1>Les utilisateurs</h1>
+
+            <div class="navigation">
+                {{ knp_pagination_render(users) }}
+            </div>
+            <table  class="datatable-user table table-striped" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>firstname</th>
+                    <th>lastname</th>
+                    <th>email</th>
+                    <th>phone</th>
+                    <th>role</th>
+                    <th>createat</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {%  for u in users %}
+
+                    <tr>
+                        <td>{{ u.id }}</td>
+                        <td>{{ u.firstname }}</td>
+                        <td>{{ u.lastname }}</td>
+                        <td>{{ u.email }}</td>
+                        <td>{{ u.phone }}</td>
+                        <td>{% for r in u.roles %}  {{ r }}  {% endfor %}</td>
+                        <td>{{ u.createdat | date('d/m/Y') }}</td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Id</th>
+                    <th>firstname</th>
+                    <th>lastname</th>
+                    <th>email</th>
+                    <th>phone</th>
+                    <th>role</th>
+                    <th>createat</th>
+                </tr>
+                </tfoot>
+            </table>
+
+            <div class="navigation">
+                {{ knp_pagination_render(users) }}
+            </div>
+
+        </div>
+
+    </div>
+    <div class="container pt-3 pb-3">
+        <div class="col-md-12">
+            <h1>Les livres actuellement loués</h1>
+
+            <div class="navigation">
+                {{ knp_pagination_render(rentedBooks) }}
+            </div>
+            <table  class="datatable-user table table-striped" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>reference</th>
+                    <th>auteur</th>
+                    <th>categories</th>
+                    <th>utilisateur</th>
+                    <th>emprunt</th>
+                    <th>retour</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for r in rentedBooks %}
+                    <tr class="{% if  r.rentingend == null and (r.limitdate|date("m/d/Y")) < ("now"|date("m/d/Y")) %}bg-warning{% endif %}">
+                        <td>{{ r.id }}</td>
+                        <td>{{ r.book.reference }}</td>
+                        <td>{{ r.book.author.lastname }} {{ r.book.author.firstname }}</td>
+                        <td>{% for category in r.book.category %} {{ category.label }} {% endfor %}</td>
+                        <td>{{ r.user.getId() }} {{ r.user.lastname }} {{ r.user.firstname }}</td>
+                        <td>{{ r.rentingstart | date('d/m/Y') }}</td>
+                        <td>{{ r.limitdate| date('d/m/Y') }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Id</th>
+                    <th>reference</th>
+                    <th>auteur</th>
+                    <th>categories</th>
+                    <th>utilisateur</th>
+                    <th>emprunt</th>
+                    <th>retour</th>
+                </tr>
+                </tfoot>
+            </table>
+
+            <div class="navigation">
+                {{ knp_pagination_render(rentedBooks) }}
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

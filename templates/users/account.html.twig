@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+{% set page_title = 'Mon compte' %}
+{% block body %}
+
+
+
+    <div class="container">
+
+        <div class="col-md-12">
+            <h1>Mes informations</h1>
+            <ul>
+                <li> id user =>  {{  user.getId() }} </li>
+                <li> last name user =>  {{  user.getLastName() }} </li>
+                <li> email user =>  {{  user.getEmail() }} </li>
+            </ul>
+        </div>
+        <div class="col-md-12">
+            <h1>Mes livres</h1>
+            {% for resp in app.session.flashBag.get('RETURN_BOOK_SUCCESS') %}
+                <div class="alert {% if resp.success == false %}alert-danger{% else %} alert-success {% endif %}" role="alert">
+                    {{ resp.message }}
+                </div>
+            {% endfor %}
+            <table id="books" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Reference</th>
+                        <th>Auteur</th>
+                        <th>Catégories</th>
+                        <th>Emprunté le</th>
+                        <th>A rendre le</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rent in rentingbooks %}
+
+                            <tr  class="{% if  rent.rentingend == null and (rent.limitdate|date("m/d/Y")) < ("now"|date("m/d/Y")) %}bg-warning{% endif %}">
+                            <td>{{ rent.id }}</td>
+                            <td>{{ rent.book.reference }}</td>
+                            <td>{{ rent.book.author.lastname }} {{ rent.book.author.firstname }}</td>
+                            <td>{% for category in rent.book.category %} {{ category.label }} {% endfor %}</td>
+                            <td>{{ rent.rentingstart |date("d/m/Y") }}</td>
+                            <td>{{ rent.limitdate |date("d/m/Y") }}</td>
+                            <td class="text-center">
+                                {% if rent.rentingend == null %}
+                                    <a href="{{ path('app_return_book',{'book_id' : rent.book.id}) }}" ><i class="bi-arrow-down-circle-fill"></i></a>
+
+                                {% else  %}
+                                    déjà rendu
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Id</th>
+                        <th>Reference</th>
+                        <th>Auteur</th>
+                        <th>Catégories</th>
+                        <th>Emprunté le</th>
+                        <th>A rendre le</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% set page_title = 'Se connecter' %}
+
+{% block body %}
+<div class="container pt-6 pb-6">
+    <h1 class="col-md-12 text-center">Se connecter</h1>
+    {% if error %}
+        <div class="col-md-12 alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form class="my-form col-md-12" action="{{ path('app_login') }}" method="post">
+        <div class="container-input">
+            <label for="username">Email:</label>
+            <input class="my-input-class" type="email" id="username" name="email" value="{{ last_email }}"/>
+        </div>
+        <div class="container-input">
+            <label for="password">Password:</label>
+            <input class="my-input-class" type="password" id="password" name="password"/>
+        </div>
+        <input type="hidden" name="_csrf_token"
+               value="{{ csrf_token('authenticate') }}"
+        >
+        <div class="container-input">
+            <button class="my-input-class btn btn-secondary" type="submit">login</button>
+        </div>
+    </form>
+
+
+</div>
+
+
+{% endblock %}

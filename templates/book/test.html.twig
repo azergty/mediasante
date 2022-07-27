@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% set page_title = 'Nos livres' %}
+
+{% block body %}
+
+
+    <ul>
+        {% for book in books %}
+            <li>
+                {{ book.reference }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="navigation">
+        {{ knp_pagination_render(books) }}
+    </div>
+
+
+    {{ form_start(book_form, {attr: {class: 'filter js-filter-form'}}) }}
+
+    <div class="spinner-border js-loading" role="status" aria-hidden="true" style="display: none">
+        <span class="sr-only">Loading...</span>
+    </div>
+
+    {{ form_row(book_form.reference) }}
+
+    <h4>Catégories</h4>
+    {{ form_row(book_form.categories) }}
+
+
+    <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+
+    {{ form_end(book_form) }}
+
+{% endblock %}

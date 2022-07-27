@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% set page_title = 'Créer un compte' %}
+{% block body %}
+<div class="container">
+
+
+    <h1 class="col-md-12 text-lg-center pt-lg-2" >Formulaire d'inscription</h1>
+    <div class="bg-white p-5 contact-form">
+
+        <ul>
+            {% for error in errors %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+
+        {{ form_start(our_form,{'attr':{'class':'container my-form'},'action':'/register','method':'POST'}) }}
+
+
+        {{ form_end(our_form) }}
+
+
+    </div>
+
+</div>
+{% endblock %}
